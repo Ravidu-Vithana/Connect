@@ -17,6 +17,40 @@ export default function home() {
     const [chatList, setChatList] = useState(null);
     const [searchName, setSearchName] = useState("");
 
+    const [loaded, error] = useFonts({
+        "SairaExtraCondensedBold": require("../../assets/fonts/SairaExtraCondensed-Bold.ttf"),
+        "RobotoCondensedRegular": require("../../assets/fonts/RobotoCondensed-Regular.ttf"),
+        "RobotoRegular": require("../../assets/fonts/Roboto-Regular.ttf"),
+    });
+
+    useEffect(
+        () => {
+            if (loaded || error) {
+                SplashScreen.hideAsync();
+            }
+        }, [loaded, error]
+    );
+
+    useEffect(() => {
+        setTimeout(() => {
+            setStatusBarStyle("light");
+        }, 0);
+    }, []);
+
+    useEffect(() => {
+        const homeIntervalId = setInterval(() => {
+            loadChatList()
+        }, 1000);
+        return () => {
+            clearInterval(homeIntervalId);
+        };
+        // loadChatList();
+    }, [searchName]);
+
+    if (!loaded && !error) {
+        return null;
+    }
+
     async function loadChatList() {
 
         const user = JSON.parse(await AsyncStorage.getItem('user'));
@@ -37,40 +71,6 @@ export default function home() {
             }
         }
     }
-
-    const [loaded, error] = useFonts({
-        "SairaExtraCondensedBold": require("../../assets/fonts/SairaExtraCondensed-Bold.ttf"),
-        "RobotoCondensedRegular": require("../../assets/fonts/RobotoCondensed-Regular.ttf"),
-        "RobotoRegular": require("../../assets/fonts/Roboto-Regular.ttf"),
-    });
-
-    useEffect(
-        () => {
-            if (loaded || error) {
-                SplashScreen.hideAsync();
-            }
-        }, [loaded, error]
-    );
-
-    if (!loaded && !error) {
-        return null;
-    }
-
-    useEffect(() => {
-        const homeIntervalId = setInterval(() => {
-            loadChatList()
-        }, 1000);
-        return () => {
-            clearInterval(homeIntervalId);
-        };
-        // loadChatList();
-    }, [searchName]);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setStatusBarStyle("light");
-        }, 0);
-    }, []);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

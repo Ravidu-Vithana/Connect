@@ -15,13 +15,6 @@ export default function changePassword() {
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
-    async function loadProfileDetails() {
-        const user = JSON.parse(await AsyncStorage.getItem('user'));
-        setUserId(user.id);
-        setOldPassword(user.password);
-
-    }
-
     const [loaded, error] = useFonts({
         "SairaExtraCondensedBold": require("../assets/fonts/SairaExtraCondensed-Bold.ttf"),
         "RobotoBold": require("../assets/fonts/Roboto-Bold.ttf"),
@@ -36,6 +29,13 @@ export default function changePassword() {
             }
         }, [loaded, error, userId]
     );
+
+    async function loadProfileDetails() {
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+        setUserId(user.id);
+        setOldPassword(user.password);
+
+    }
 
     if (!loaded && !error) {
         return null;

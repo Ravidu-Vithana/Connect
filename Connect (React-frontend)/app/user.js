@@ -27,10 +27,6 @@ export default function user() {
         }, [loaded, error]
     );
 
-    if (!loaded && !error) {
-        return null;
-    }
-
     useEffect(() => {
         setTimeout(() => {
             setStatusBarStyle("light");
@@ -59,6 +55,10 @@ export default function user() {
     const parameters = useLocalSearchParams();
 
     const imagePath = "http://192.168.8.162:8080/Connect/Avatar_Images/" + parameters.otherUserMobile + ".png";
+
+    if (!loaded && !error) {
+        return null;
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: "#004F87" }}>

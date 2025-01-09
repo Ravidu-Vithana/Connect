@@ -16,20 +16,6 @@ export default function changeProfile() {
     const [about, setAbout] = useState("Loading...");
     const [userId, setUserId] = useState("Loading...");
 
-    async function loadProfileDetails() {
-        const user = JSON.parse(await AsyncStorage.getItem('user'));
-        setUserId(user.id);
-        setFirstName(user.firstName);
-        setLastName(user.lastName);
-        setAbout(user.about);
-
-        const response = await fetch("http://192.168.8.162:8080/Connect/Avatar_Images/" + user.mobile + ".png");
-        if (response.ok) {
-            setImage("http://192.168.8.162:8080/Connect/Avatar_Images/" + user.mobile + ".png");
-        }
-
-    }
-
     const [loaded, error] = useFonts({
         "SairaExtraCondensedBold": require("../assets/fonts/SairaExtraCondensed-Bold.ttf"),
         "RobotoBold": require("../assets/fonts/Roboto-Bold.ttf"),
@@ -44,6 +30,20 @@ export default function changeProfile() {
             }
         }, [loaded, error, userId]
     );
+
+    async function loadProfileDetails() {
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+        setUserId(user.id);
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setAbout(user.about);
+
+        const response = await fetch("http://192.168.8.162:8080/Connect/Avatar_Images/" + user.mobile + ".png");
+        if (response.ok) {
+            setImage("http://192.168.8.162:8080/Connect/Avatar_Images/" + user.mobile + ".png");
+        }
+
+    }
 
     if (!loaded && !error) {
         return null;

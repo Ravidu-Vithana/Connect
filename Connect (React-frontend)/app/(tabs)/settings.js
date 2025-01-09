@@ -34,6 +34,12 @@ export default function user() {
         "RobotoMedium": require("../../assets/fonts/Roboto-Medium.ttf"),
     });
 
+    useEffect(() => {
+        setTimeout(() => {
+            setStatusBarStyle("light");
+        }, 0);
+    }, []);
+
     useEffect(
         () => {
             if (loaded || error) {
@@ -67,12 +73,6 @@ export default function user() {
     if (!loaded && !error) {
         return null;
     }
-
-    useEffect(() => {
-        setTimeout(() => {
-            setStatusBarStyle("light");
-        }, 0);
-    }, []);
 
     return (
         <View style={{ flex: 1, backgroundColor: "#004F87" }}>

@@ -19,6 +19,46 @@ export default function chat() {
     const [message, setMessage] = useState(null);
     const flashlistRef = useRef(null);
 
+    const [loaded, error] = useFonts({
+        "SairaExtraCondensedBold": require("../assets/fonts/SairaExtraCondensed-Bold.ttf"),
+        "RobotoCondensedRegular": require("../assets/fonts/RobotoCondensed-Regular.ttf"),
+        "RobotoRegular": require("../assets/fonts/Roboto-Regular.ttf"),
+        "RobotoMedium": require("../assets/fonts/Roboto-Medium.ttf"),
+    });
+
+    useEffect(
+        () => {
+            if (loaded || error) {
+                SplashScreen.hideAsync();
+            }
+        }, [loaded, error]
+    );
+
+    useEffect(() => {
+        setTimeout(() => {
+            setStatusBarStyle("light");
+        }, 0);
+    }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            loadChat()
+        }, 1000);
+        return () => clearInterval(intervalId);
+        // loadChat();
+    }, []);
+
+    useEffect(() => {
+        const showSubscription = Keyboard.addListener('keyboardDidShow', (event) => {
+            if (flashlistRef.current != null && flashlistRef.current != undefined) {
+                flashlistRef.current.scrollToEnd({ animated: true });
+            }
+        });
+        return () => {
+            showSubscription.remove();
+        };
+    }, []);
+
     const parameters = useLocalSearchParams();
 
     let userName = parameters.otherUserName;
@@ -28,13 +68,6 @@ export default function chat() {
     }
 
     const imagePath = "http://192.168.8.162:8080/Connect/Avatar_Images/" + parameters.otherUserMobile + ".png";
-
-    
-    const handleKeyboardShow = event => {
-        if(flashlistRef.current != null && flashlistRef.current != undefined){
-            flashlistRef.current.scrollToEnd({ animated: true });
-        }
-    };
 
     async function loadChat() {
 
@@ -53,48 +86,9 @@ export default function chat() {
         }
     }
 
-    const [loaded, error] = useFonts({
-        "SairaExtraCondensedBold": require("../assets/fonts/SairaExtraCondensed-Bold.ttf"),
-        "RobotoCondensedRegular": require("../assets/fonts/RobotoCondensed-Regular.ttf"),
-        "RobotoRegular": require("../assets/fonts/Roboto-Regular.ttf"),
-        "RobotoMedium": require("../assets/fonts/Roboto-Medium.ttf"),
-    });
-
-    useEffect(
-        () => {
-            if (loaded || error) {
-
-                SplashScreen.hideAsync();
-            }
-        }, [loaded, error]
-    );
-
     if (!loaded && !error) {
         return null;
     }
-
-    useEffect(() => {
-        const showSubscription = Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
-
-        return () => {
-            showSubscription.remove();
-        };
-    }, []);
-
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            loadChat()
-        }, 1000);
-        return () => clearInterval(intervalId);
-        // loadChat();
-    }, []);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setStatusBarStyle("light");
-        }, 0);
-    }, []);
 
     return (
         <View style={{ flex: 1, backgroundColor: "#004F87" }}>

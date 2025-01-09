@@ -46,15 +46,15 @@ export default function index() {
     }, [loaded, error]
   );
 
-  if (!loaded && !error) {
-    return null;
-  }
-
   useEffect(() => {
     setTimeout(() => {
       setStatusBarStyle("light");
     }, 0);
   }, []);
+
+  if (!loaded && !error) {
+    return null;
+  }
 
   return (
     <View style={{ flex: 1 }}>

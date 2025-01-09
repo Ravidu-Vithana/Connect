@@ -18,24 +18,6 @@ export default function home() {
     const [userList, setUserList] = useState([]);
     const [searchName, setSearchName] = useState("");
 
-    async function loadUserList() {
-
-        const user = JSON.parse(await AsyncStorage.getItem('user'));
-
-        let response = await fetch(
-            "http://192.168.8.162:8080/Connect/LoadUserList?userId=" + user.id + "&name=" + searchName
-        );
-
-        if (response.ok) {
-            let json = await response.json();
-            if (json.success) {
-                setUserList(json.userList);
-            } else if (json.message == "nousers"){
-                setUserList([]);
-            }
-        }
-    }
-
     const [loaded, error] = useFonts({
         "SairaExtraCondensedBold": require("../assets/fonts/SairaExtraCondensed-Bold.ttf"),
         "RobotoCondensedRegular": require("../assets/fonts/RobotoCondensed-Regular.ttf"),
@@ -50,9 +32,11 @@ export default function home() {
         }, [loaded, error]
     );
 
-    if (!loaded && !error) {
-        return null;
-    }
+    useEffect(() => {
+        setTimeout(() => {
+            setStatusBarStyle("light");
+        }, 0);
+    }, []);
 
     useEffect(() => {
         const homeIntervalId = setInterval(() => {
@@ -62,11 +46,27 @@ export default function home() {
         // loadUserList();
     }, [searchName]);
 
-    useEffect(() => {
-        setTimeout(() => {
-            setStatusBarStyle("light");
-        }, 0);
-    }, []);
+    if (!loaded && !error) {
+        return null;
+    }
+
+    async function loadUserList() {
+
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+
+        let response = await fetch(
+            "http://192.168.8.162:8080/Connect/LoadUserList?userId=" + user.id + "&name=" + searchName
+        );
+
+        if (response.ok) {
+            let json = await response.json();
+            if (json.success) {
+                setUserList(json.userList);
+            } else if (json.message == "nousers") {
+                setUserList([]);
+            }
+        }
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
