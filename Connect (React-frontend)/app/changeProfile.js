@@ -64,7 +64,7 @@ export default function changeProfile() {
                                     <Pressable style={styles.button2} onPress={async () => {
                                         let result = await ImagePicker.launchImageLibraryAsync(
                                             {
-                                                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                                                mediaTypes: ['images'],
                                                 allowsEditing: true,
                                             }
                                         );
